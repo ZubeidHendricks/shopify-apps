@@ -1,0 +1,17 @@
+query RunInput {
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+      }
+    }
+    lines {
+      quantity
+    }
+  }
+  shop {
+    metafield(namespace: "factory", key: "config") {
+      value
+    }
+  }
+}

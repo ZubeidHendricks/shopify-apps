@@ -1,0 +1,21 @@
+# Function extension config. `__APP_SLUG__` is replaced by the generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "__APP_NAME__"
+handle = "__APP_SLUG__-discount"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.lines.discounts.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  # Config metafield the admin app writes and the Function reads.
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

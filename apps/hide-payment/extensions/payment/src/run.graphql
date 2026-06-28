@@ -1,0 +1,23 @@
+query RunInput {
+  paymentMethods {
+    id
+    name
+  }
+  cart {
+    cost {
+      totalAmount {
+        amount
+      }
+    }
+    deliveryGroups {
+      deliveryAddress {
+        countryCode
+      }
+    }
+  }
+  shop {
+    metafield(namespace: "factory", key: "config") {
+      value
+    }
+  }
+}

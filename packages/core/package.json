@@ -1,0 +1,25 @@
+{
+  "name": "@factory/core",
+  "version": "0.1.0",
+  "description": "Shared Remix admin core for the Shopify app portfolio: billing plans, mandatory GDPR webhooks, metafield-backed settings, analytics, and the app factory.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./billing": "./src/billing.ts",
+    "./webhooks": "./src/webhooks.ts",
+    "./settings": "./src/settings.ts",
+    "./analytics": "./src/analytics.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@shopify/shopify-app-remix": ">=3",
+    "@shopify/shopify-api": ">=11"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

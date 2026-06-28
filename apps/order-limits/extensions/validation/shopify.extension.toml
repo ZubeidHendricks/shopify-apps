@@ -1,0 +1,20 @@
+# Cart checkout validation Function. `order-limits` is replaced by the generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "Order Limits"
+handle = "order-limits-validation"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.validations.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

@@ -1,0 +1,1 @@
+{ "scopes": "", "feature": "validation", "blurb": "Enforce min order value / max item count at checkout (cart.validations.generate.run)" }

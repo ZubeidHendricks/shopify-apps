@@ -1,0 +1,21 @@
+# Function extension config. `volume-discount` is replaced by the generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "Volume Discounts"
+handle = "volume-discount-discount"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.lines.discounts.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  # Config metafield the admin app writes and the Function reads.
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

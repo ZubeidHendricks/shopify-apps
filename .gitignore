@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+.cache/
+.env
+.env.*
+!.env.example
+*.log
+.shopify/
+.DS_Store
+extensions/**/*.wasm
+prisma/dev.sqlite

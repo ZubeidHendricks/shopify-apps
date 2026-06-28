@@ -1,0 +1,1 @@
+{ "scopes": "write_payment_customizations", "feature": "payment", "blurb": "Hide a payment method by cart total / country (purchase.payment-customization.run)" }

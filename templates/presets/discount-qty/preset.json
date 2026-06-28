@@ -1,0 +1,1 @@
+{ "scopes": "write_discounts", "feature": "discount", "blurb": "Volume/quantity % discount at qty thresholds (cart.lines.discounts.generate.run)" }

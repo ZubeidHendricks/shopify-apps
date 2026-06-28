@@ -1,0 +1,1 @@
+{ "scopes": "write_discounts", "feature": "discount", "blurb": "Spend-more-save-more % discount at subtotal thresholds (cart.lines.discounts.generate.run)" }

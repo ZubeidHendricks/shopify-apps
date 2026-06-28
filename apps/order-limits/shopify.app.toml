@@ -1,0 +1,23 @@
+# Generated per app. `shopify app config link` fills client_id after you create
+# the app in the Partner Dashboard. Placeholders are replaced by the generator.
+name = "Order Limits"
+handle = "order-limits"
+application_url = "https://order-limits.example.com"
+embedded = true
+
+[access_scopes]
+scopes = ""
+
+[auth]
+redirect_urls = [
+  "https://order-limits.example.com/auth/callback",
+  "https://order-limits.example.com/auth/shopify/callback",
+  "https://order-limits.example.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-01"
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = ""

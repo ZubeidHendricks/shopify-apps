@@ -1,0 +1,23 @@
+# Generated per app. `shopify app config link` fills client_id after you create
+# the app in the Partner Dashboard. Placeholders are replaced by the generator.
+name = "Hide Payment Method"
+handle = "hide-payment"
+application_url = "https://hide-payment.example.com"
+embedded = true
+
+[access_scopes]
+scopes = "write_payment_customizations"
+
+[auth]
+redirect_urls = [
+  "https://hide-payment.example.com/auth/callback",
+  "https://hide-payment.example.com/auth/shopify/callback",
+  "https://hide-payment.example.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-01"
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = ""
