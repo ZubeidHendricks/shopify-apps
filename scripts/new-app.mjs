@@ -53,13 +53,18 @@ if (existsSync(dest)) fail(`apps/${slug} already exists`);
 
 const preset = JSON.parse(await readFile(join(PRESETS, kind, "preset.json"), "utf8"));
 const scopes = preset.scopes ?? "";
+const blurb = preset.blurb ?? "";
+const target = preset.target ?? "";
 
 async function substituteInFile(path) {
   const original = await readFile(path, "utf8");
   const replaced = original
     .replaceAll("__APP_SLUG__", slug)
     .replaceAll("__APP_NAME__", name)
-    .replaceAll("__APP_SCOPES__", scopes);
+    .replaceAll("__APP_SCOPES__", scopes)
+    .replaceAll("__APP_BLURB__", blurb)
+    .replaceAll("__APP_KIND__", kind)
+    .replaceAll("__APP_TARGET__", target);
   if (replaced !== original) await writeFile(path, replaced);
 }
 

@@ -1,0 +1,19 @@
+query RunInput {
+  cart {
+    lines {
+      quantity
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          id
+          title
+        }
+      }
+    }
+  }
+  shop {
+    metafield(namespace: "factory", key: "config") {
+      value
+    }
+  }
+}

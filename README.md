@@ -54,8 +54,12 @@ not reskins. Available kinds = subdirs of `templates/presets/`:
 | --- | --- | --- | --- |
 | `discount-qty` *(default)* | `cart.lines.discounts.generate.run` | write_discounts | % off at quantity thresholds |
 | `discount-spend` | `cart.lines.discounts.generate.run` | write_discounts | % off at subtotal thresholds |
+| `bogo` | `cart.lines.discounts.generate.run` | write_discounts | buy X get Y at a discount (per line) |
+| `first-order` | `cart.lines.discounts.generate.run` | write_discounts | % off for first-time customers |
 | `cart-min-max` | `cart.validations.generate.run` | — | min order value / max item count |
+| `per-product-limit` | `cart.validations.generate.run` | — | cap units per product/variant |
 | `payment-hide` | `purchase.payment-customization.run` | write_payment_customizations | hide a payment method by total/country |
+| `delivery-hide` | `purchase.delivery-customization.run` | write_delivery_customizations | hide a delivery option by total/country |
 
 ```bash
 npm install                                          # links workspaces
@@ -91,12 +95,16 @@ iterate on reviewer feedback. See `IDEAS.md` for the backlog.
 
 - `@factory/function-kit` — typechecks clean (`npm run typecheck -w @factory/function-kit`).
 - `@factory/core` — typechecks once an app installs the `@shopify/shopify-app-remix` peer dep.
-- All four preset `run.ts` Functions typecheck clean against function-kit.
-- First review batch generated (4 apps, 3 distinct Function targets):
+- All eight preset `run.ts` Functions typecheck clean against function-kit.
+- 8 apps generated across 4 distinct Function targets, each with its own README:
   - `apps/volume-discount` — quantity-threshold discount
   - `apps/spend-save` — subtotal-threshold discount
+  - `apps/bogo` — buy X get Y (per line)
+  - `apps/first-order-discount` — first-time-customer discount
   - `apps/order-limits` — cart validation (min value / max items)
+  - `apps/product-limits` — per-product/variant quantity cap
   - `apps/hide-payment` — payment-method hiding by total/country
+  - `apps/hide-delivery` — delivery-option hiding by total/country
 
 Each still needs `shopify app config link` → `dev` → `deploy` against your
 Partner account (interactive auth), then a listing + submission.

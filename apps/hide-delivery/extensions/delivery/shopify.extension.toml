@@ -1,0 +1,20 @@
+# Delivery customization Function. `hide-delivery` is replaced by the generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "Hide Delivery Option"
+handle = "hide-delivery-delivery"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "purchase.delivery-customization.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

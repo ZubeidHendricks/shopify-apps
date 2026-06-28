@@ -1,1 +1,1 @@
-{ "scopes": "write_payment_customizations", "feature": "payment", "blurb": "Hide a payment method by cart total / country (purchase.payment-customization.run)" }
+{ "scopes": "write_payment_customizations", "feature": "payment", "target": "purchase.payment-customization.run", "blurb": "Hide a named payment method when the cart total is below a threshold, and (Pro) for specific countries." }

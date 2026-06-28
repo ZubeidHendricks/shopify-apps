@@ -1,0 +1,20 @@
+# Delivery customization Function. `__APP_SLUG__` is replaced by the generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "__APP_NAME__"
+handle = "__APP_SLUG__-delivery"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "purchase.delivery-customization.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

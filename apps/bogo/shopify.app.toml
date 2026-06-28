@@ -1,0 +1,23 @@
+# Generated per app. `shopify app config link` fills client_id after you create
+# the app in the Partner Dashboard. Placeholders are replaced by the generator.
+name = "Buy X Get Y"
+handle = "bogo"
+application_url = "https://bogo.example.com"
+embedded = true
+
+[access_scopes]
+scopes = "write_discounts"
+
+[auth]
+redirect_urls = [
+  "https://bogo.example.com/auth/callback",
+  "https://bogo.example.com/auth/shopify/callback",
+  "https://bogo.example.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-01"
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = ""

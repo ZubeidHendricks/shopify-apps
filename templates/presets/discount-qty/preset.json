@@ -1,1 +1,1 @@
-{ "scopes": "write_discounts", "feature": "discount", "blurb": "Volume/quantity % discount at qty thresholds (cart.lines.discounts.generate.run)" }
+{ "scopes": "write_discounts", "feature": "discount", "target": "cart.lines.discounts.generate.run", "blurb": "Apply a percentage discount once the cart reaches a quantity threshold. Pro unlocks multiple tiers." }

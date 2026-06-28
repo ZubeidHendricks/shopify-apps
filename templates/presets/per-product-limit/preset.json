@@ -1,0 +1,1 @@
+{ "scopes": "", "feature": "validation", "target": "cart.validations.generate.run", "blurb": "Cap how many units of a product a customer can buy per order. Starter sets one global per-line limit; Pro adds per-variant overrides." }

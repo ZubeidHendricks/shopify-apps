@@ -9,9 +9,9 @@ widgets are listed for later when the core grows a Theme App Extension path.
 1. **Volume / quantity discount** — % off at qty thresholds. *(built: apps/volume-discount, preset discount-qty)*
 2. **Spend-more-save-more** — % off at cart-subtotal thresholds. *(built: apps/spend-save, preset discount-spend)*
 3. Bundle discount — buy X + Y together, get % off.
-4. BOGO / buy-X-get-Y-free.
+4. **BOGO / buy-X-get-Y.** *(built: apps/bogo, preset bogo)*
 5. Tiered loyalty discount by customer tag/segment.
-6. First-order discount (new customers only).
+6. **First-order discount (new customers only).** *(built: apps/first-order-discount, preset first-order)*
 7. Bulk-pricing for B2B / wholesale tags.
 8. Free gift with purchase (auto-add via discount + cart transform).
 9. Clearance / collection-specific auto discount.
@@ -20,13 +20,13 @@ widgets are listed for later when the core grows a Theme App Extension path.
 ### Cart & checkout validation (`cart.validations.generate.run`)
 11. **Minimum order amount enforcement.** *(built: apps/order-limits, preset cart-min-max)*
 12. **Maximum order quantity / anti-scalping limit.** *(built: apps/order-limits — Pro tier)*
-13. Per-product purchase limits.
+13. **Per-product purchase limits.** *(built: apps/product-limits, preset per-product-limit)*
 14. Block mixed domestic/international carts.
 15. Require minimum quantity for specific products.
 16. PO-box / region checkout blocking.
 
-### Delivery customization (`cart.delivery-options.generate.run`)
-17. Hide express shipping below a threshold.
+### Delivery customization (`purchase.delivery-customization.run`)
+17. **Hide express shipping below a threshold.** *(built: apps/hide-delivery, preset delivery-hide; also hides by country on Pro)*
 18. Rename/reorder shipping methods by cart contents.
 19. Hide shipping methods for heavy/oversized items.
 20. Local-pickup-only for certain products.

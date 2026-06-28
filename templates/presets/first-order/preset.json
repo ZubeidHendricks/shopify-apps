@@ -1,0 +1,1 @@
+{ "scopes": "write_discounts", "feature": "discount", "target": "cart.lines.discounts.generate.run", "blurb": "Give a percentage off to first-time customers (no prior orders). Starter targets logged-in new customers; Pro can also include guest checkouts." }

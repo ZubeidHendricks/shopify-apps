@@ -1,0 +1,18 @@
+query RunInput {
+  cart {
+    lines {
+      id
+      quantity
+      cost {
+        amountPerQuantity {
+          amount
+        }
+      }
+    }
+  }
+  discountNode {
+    metafield(namespace: "$app:settings", key: "config") {
+      value
+    }
+  }
+}

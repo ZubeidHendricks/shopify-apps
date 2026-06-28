@@ -1,0 +1,1 @@
+{ "scopes": "write_delivery_customizations", "feature": "delivery", "target": "purchase.delivery-customization.run", "blurb": "Hide a named delivery option (e.g. Express) when the cart subtotal is below a threshold, and (Pro) for specific countries." }

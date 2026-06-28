@@ -1,0 +1,16 @@
+{
+  "name": "product-limits-validation-function",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "shopify app function build",
+    "typegen": "shopify app function typegen"
+  },
+  "dependencies": {
+    "@factory/function-kit": "*"
+  },
+  "devDependencies": {
+    "@shopify/shopify_function": "^1.0.0",
+    "javy": "^0.1.0"
+  }
+}

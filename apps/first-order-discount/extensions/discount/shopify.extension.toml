@@ -1,0 +1,20 @@
+# First-order discount Function. `first-order-discount` is replaced by the generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "First Order Discount"
+handle = "first-order-discount-discount"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.lines.discounts.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

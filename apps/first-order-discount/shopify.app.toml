@@ -1,0 +1,23 @@
+# Generated per app. `shopify app config link` fills client_id after you create
+# the app in the Partner Dashboard. Placeholders are replaced by the generator.
+name = "First Order Discount"
+handle = "first-order-discount"
+application_url = "https://first-order-discount.example.com"
+embedded = true
+
+[access_scopes]
+scopes = "write_discounts"
+
+[auth]
+redirect_urls = [
+  "https://first-order-discount.example.com/auth/callback",
+  "https://first-order-discount.example.com/auth/shopify/callback",
+  "https://first-order-discount.example.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2025-01"
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = ""
