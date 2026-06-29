@@ -161,7 +161,7 @@ test("payment-hide: hides named method below threshold", () => {
     shop: shop(cfg),
   };
   const r = hidePayment(input as any);
-  assert.deepEqual(r.operations, [{ hide: { paymentMethodId: "pm1" } }]);
+  assert.deepEqual(r.operations, [{ paymentMethodHide: { paymentMethodId: "pm1" } }]);
 });
 
 test("payment-hide: country rule is pro-only", () => {
@@ -188,7 +188,7 @@ test("delivery-hide: hides matching option below subtotal", () => {
     shop: shop(cfg),
   };
   const r = hideDelivery(input as any);
-  assert.deepEqual(r.operations, [{ hide: { deliveryOptionHandle: "exp" } }]);
+  assert.deepEqual(r.operations, [{ deliveryOptionHide: { deliveryOptionHandle: "exp" } }]);
 });
 
 // ---------------------------------------------------------------------------
@@ -199,11 +199,11 @@ test("rename-shipping: renames; pro adds move-to-top", () => {
     cart: { deliveryGroups: [{ deliveryOptions: [{ handle: "std", title: "Standard" }] }] },
   };
   const starter = renameShipping({ ...base, shop: shop({ plan: "starter", matchTitle: "Standard", newName: "Free Shipping", moveToTop: true }) } as any);
-  assert.deepEqual(starter.operations, [{ rename: { deliveryOptionHandle: "std", title: "Free Shipping" } }]);
+  assert.deepEqual(starter.operations, [{ deliveryOptionRename: { deliveryOptionHandle: "std", title: "Free Shipping" } }]);
 
   const pro = renameShipping({ ...base, shop: shop({ plan: "pro", matchTitle: "Standard", newName: "Free Shipping", moveToTop: true }) } as any);
   assert.equal(pro.operations.length, 2);
-  assert.deepEqual(pro.operations[1], { move: { deliveryOptionHandle: "std", index: 0 } });
+  assert.deepEqual(pro.operations[1], { deliveryOptionMove: { deliveryOptionHandle: "std", index: 0 } });
 });
 
 // ---------------------------------------------------------------------------

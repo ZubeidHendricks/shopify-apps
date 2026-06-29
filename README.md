@@ -61,9 +61,9 @@ not reskins. Available kinds = subdirs of `templates/presets/`:
 | `cart-min-max` | `cart.validations.generate.run` | — | min order value / max item count |
 | `per-product-limit` | `cart.validations.generate.run` | — | cap units per product/variant |
 | `country-block` | `cart.validations.generate.run` | — | block/allow checkout by country |
-| `payment-hide` | `purchase.payment-customization.run` | write_payment_customizations | hide a payment method by total/country |
-| `delivery-hide` | `purchase.delivery-customization.run` | write_delivery_customizations | hide a delivery option by total/country |
-| `rename-shipping` | `purchase.delivery-customization.run` | write_delivery_customizations | rename a delivery option (Pro: move to top) |
+| `payment-hide` | `cart.payment-methods.transform.run` | write_payment_customizations | hide a payment method by total/country |
+| `delivery-hide` | `cart.delivery-options.transform.run` | write_delivery_customizations | hide a delivery option by total/country |
+| `rename-shipping` | `cart.delivery-options.transform.run` | write_delivery_customizations | rename a delivery option (Pro: move to top) |
 
 ```bash
 npm install                                          # links workspaces

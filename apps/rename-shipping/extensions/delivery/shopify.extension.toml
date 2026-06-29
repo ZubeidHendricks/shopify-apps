@@ -7,7 +7,7 @@ handle = "rename-shipping-delivery"
 type = "function"
 
   [[extensions.targeting]]
-  target = "purchase.delivery-customization.run"
+  target = "cart.delivery-options.transform.run"
   input_query = "src/run.graphql"
   export = "run"
 

@@ -28,8 +28,9 @@ interface RunInput {
   };
 }
 
+// CartDeliveryOptionsTransformRunResult (cart.delivery-options.transform API).
 interface FunctionRunResult {
-  operations: { hide: { deliveryOptionHandle: string } }[];
+  operations: { deliveryOptionHide: { deliveryOptionHandle: string } }[];
 }
 
 interface DeliveryConfig {
@@ -74,5 +75,5 @@ export function run(input: RunInput): FunctionRunResult {
   }
   if (handles.length === 0) return NONE;
 
-  return { operations: handles.map((deliveryOptionHandle) => ({ hide: { deliveryOptionHandle } })) };
+  return { operations: handles.map((deliveryOptionHandle) => ({ deliveryOptionHide: { deliveryOptionHandle } })) };
 }

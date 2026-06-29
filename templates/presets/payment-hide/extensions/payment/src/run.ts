@@ -24,8 +24,9 @@ interface RunInput {
   };
 }
 
+// CartPaymentMethodsTransformRunResult (purchase.payment-methods transform API).
 interface FunctionRunResult {
-  operations: { hide: { paymentMethodId: string } }[];
+  operations: { paymentMethodHide: { paymentMethodId: string } }[];
 }
 
 interface PaymentConfig {
@@ -63,5 +64,5 @@ export function run(input: RunInput): FunctionRunResult {
   }
 
   if (!hide) return NONE;
-  return { operations: [{ hide: { paymentMethodId: target.id } }] };
+  return { operations: [{ paymentMethodHide: { paymentMethodId: target.id } }] };
 }

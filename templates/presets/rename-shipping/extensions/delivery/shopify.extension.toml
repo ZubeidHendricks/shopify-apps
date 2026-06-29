@@ -7,7 +7,7 @@ handle = "__APP_SLUG__-delivery"
 type = "function"
 
   [[extensions.targeting]]
-  target = "purchase.delivery-customization.run"
+  target = "cart.delivery-options.transform.run"
   input_query = "src/run.graphql"
   export = "run"
 

@@ -37,22 +37,26 @@ cost.amountPerQuantity.amount }`, `cart.cost.subtotalAmount.amount`,
   [{ message, target }] } }]`. Matches.
 - All input `run.graphql` field names verified against the schemas.
 
-## Pending — needs MCP introspection (version-exact) ⏳
+## Migrated to the transform API ✅
 
-The latest docs describe the **transform** API for these, with renamed
-operations and possibly renamed targets — but the exact target string for
-`api_version = "2025-01"` is ambiguous from docs alone, and a legacy target with
-new op names (or vice-versa) is guaranteed wrong. Deferring rather than guessing:
+The customization Functions used the legacy `purchase.*-customization.run`
+targets with unprefixed `hide`/`rename`/`move` operations. Migrated all three to
+the current transform API (target + operation names + result type) per the
+shopify.dev reference:
 
-| App | Current (legacy) | Docs suggest (transform API) |
-| --- | --- | --- |
-| hide-payment | target `purchase.payment-customization.run`, op `hide{paymentMethodId}` | `paymentMethodHide{paymentMethodId}`, type `CartPaymentMethodsTransformRunResult` |
-| hide-delivery | target `purchase.delivery-customization.run`, op `hide{deliveryOptionHandle}` | `deliveryOptionHide{deliveryOptionHandle}`, type `CartDeliveryOptionsTransformRunResult` |
-| rename-shipping | ops `rename`/`move` | `deliveryOptionRename`/`deliveryOptionMove` |
+| App | Now |
+| --- | --- |
+| hide-payment | target `cart.payment-methods.transform.run`, op `paymentMethodHide{paymentMethodId}`, type `CartPaymentMethodsTransformRunResult` |
+| hide-delivery | target `cart.delivery-options.transform.run`, op `deliveryOptionHide{deliveryOptionHandle}`, type `CartDeliveryOptionsTransformRunResult` |
+| rename-shipping | target `cart.delivery-options.transform.run`, ops `deliveryOptionRename{handle,title}` / `deliveryOptionMove{handle,index}` |
 
-**To resolve:** reload the session so the `shopify-dev` MCP tools load, then
-introspect the payment/delivery customization schemas for `2025-01` and confirm
-the exact target + operation names before changing these three.
+Scopes unchanged (`write_payment_customizations` / `write_delivery_customizations`).
+Input `run.graphql` field names were already correct.
+
+> Confidence: medium-high (doc-sourced). The version-exact backstop is
+> `npm run verify -- <slug>`, which runs `shopify app function run` against the
+> fixture — confirm the target/ops there once an app is linked, or re-introspect
+> with the `shopify-dev` MCP after a session restart.
 
 ## How this was verified
 

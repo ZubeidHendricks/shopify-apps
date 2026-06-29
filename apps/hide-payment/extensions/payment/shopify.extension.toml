@@ -7,7 +7,7 @@ handle = "hide-payment-payment"
 type = "function"
 
   [[extensions.targeting]]
-  target = "purchase.payment-customization.run"
+  target = "cart.payment-methods.transform.run"
   input_query = "src/run.graphql"
   export = "run"
 

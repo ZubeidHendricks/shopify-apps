@@ -20,9 +20,10 @@ interface RunInput {
   shop: { metafield: { value: string } | null };
 }
 
+// CartDeliveryOptionsTransformRunResult operations (cart.delivery-options.transform API).
 type Operation =
-  | { rename: { deliveryOptionHandle: string; title: string } }
-  | { move: { deliveryOptionHandle: string; index: number } };
+  | { deliveryOptionRename: { deliveryOptionHandle: string; title: string } }
+  | { deliveryOptionMove: { deliveryOptionHandle: string; index: number } };
 
 interface FunctionRunResult {
   operations: Operation[];
@@ -51,9 +52,9 @@ export function run(input: RunInput): FunctionRunResult {
   for (const group of input.cart.deliveryGroups) {
     for (const option of group.deliveryOptions) {
       if (option.title !== config.matchTitle) continue;
-      operations.push({ rename: { deliveryOptionHandle: option.handle, title: config.newName } });
+      operations.push({ deliveryOptionRename: { deliveryOptionHandle: option.handle, title: config.newName } });
       if (canMove) {
-        operations.push({ move: { deliveryOptionHandle: option.handle, index: 0 } });
+        operations.push({ deliveryOptionMove: { deliveryOptionHandle: option.handle, index: 0 } });
       }
     }
   }
