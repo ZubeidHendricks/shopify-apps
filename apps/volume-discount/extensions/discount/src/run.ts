@@ -32,15 +32,14 @@ interface RunInput {
   };
 }
 
-interface Discount {
+interface OrderDiscountCandidate {
   message: string;
   value: { percentage: { value: string } };
-  targets: { orderSubtotal: { excludedVariantIds: string[] } }[];
+  targets: { orderSubtotal: { excludedCartLineIds: string[] } }[];
 }
 
 interface FunctionRunResult {
-  discountApplicationStrategy: "FIRST" | "MAXIMUM" | "ALL";
-  discounts: Discount[];
+  operations: { orderDiscountsAdd: { selectionStrategy: "FIRST" | "MAXIMUM"; candidates: OrderDiscountCandidate[] } }[];
 }
 
 interface VolumeConfig {
@@ -50,10 +49,7 @@ interface VolumeConfig {
 
 const DEFAULT_CONFIG: VolumeConfig = { plan: "free", tiers: [] };
 
-const EMPTY: FunctionRunResult = {
-  discountApplicationStrategy: "FIRST",
-  discounts: [],
-};
+const EMPTY: FunctionRunResult = { operations: [] };
 
 export function run(input: RunInput): FunctionRunResult {
   const config = parseConfig<VolumeConfig>(
@@ -75,12 +71,18 @@ export function run(input: RunInput): FunctionRunResult {
   if (pct <= 0) return EMPTY;
 
   return {
-    discountApplicationStrategy: "FIRST",
-    discounts: [
+    operations: [
       {
-        message: `${pct}% off ${tier.threshold}+ items`,
-        value: { percentage: { value: pct.toString() } },
-        targets: [{ orderSubtotal: { excludedVariantIds: [] } }],
+        orderDiscountsAdd: {
+          selectionStrategy: "FIRST",
+          candidates: [
+            {
+              message: `${pct}% off ${tier.threshold}+ items`,
+              value: { percentage: { value: pct.toString() } },
+              targets: [{ orderSubtotal: { excludedCartLineIds: [] } }],
+            },
+          ],
+        },
       },
     ],
   };

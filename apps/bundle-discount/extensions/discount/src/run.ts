@@ -16,15 +16,14 @@ interface RunInput {
   discountNode: { metafield: { value: string } | null };
 }
 
-interface Discount {
+interface OrderDiscountCandidate {
   message: string;
   value: { percentage: { value: string } };
-  targets: { orderSubtotal: { excludedVariantIds: string[] } }[];
+  targets: { orderSubtotal: { excludedCartLineIds: string[] } }[];
 }
 
 interface FunctionRunResult {
-  discountApplicationStrategy: "FIRST" | "MAXIMUM" | "ALL";
-  discounts: Discount[];
+  operations: { orderDiscountsAdd: { selectionStrategy: "FIRST" | "MAXIMUM"; candidates: OrderDiscountCandidate[] } }[];
 }
 
 interface BundleConfig {
@@ -34,7 +33,7 @@ interface BundleConfig {
 }
 
 const DEFAULT_CONFIG: BundleConfig = { plan: "free", minItems: 2, percentage: 10 };
-const EMPTY: FunctionRunResult = { discountApplicationStrategy: "FIRST", discounts: [] };
+const EMPTY: FunctionRunResult = { operations: [] };
 
 export function run(input: RunInput): FunctionRunResult {
   const config = parseConfig<BundleConfig>(input.discountNode.metafield?.value, DEFAULT_CONFIG);
@@ -49,12 +48,18 @@ export function run(input: RunInput): FunctionRunResult {
   if (distinctItems < minItems) return EMPTY;
 
   return {
-    discountApplicationStrategy: "FIRST",
-    discounts: [
+    operations: [
       {
-        message: `${pct}% off when you buy ${minItems}+ different products`,
-        value: { percentage: { value: pct.toString() } },
-        targets: [{ orderSubtotal: { excludedVariantIds: [] } }],
+        orderDiscountsAdd: {
+          selectionStrategy: "FIRST",
+          candidates: [
+            {
+              message: `${pct}% off when you buy ${minItems}+ different products`,
+              value: { percentage: { value: pct.toString() } },
+              targets: [{ orderSubtotal: { excludedCartLineIds: [] } }],
+            },
+          ],
+        },
       },
     ],
   };

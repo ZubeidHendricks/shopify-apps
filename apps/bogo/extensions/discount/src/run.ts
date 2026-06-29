@@ -29,15 +29,14 @@ interface RunInput {
   discountNode: { metafield: { value: string } | null };
 }
 
-interface Discount {
+interface ProductDiscountCandidate {
   message: string;
   value: { fixedAmount: { amount: string } };
   targets: { cartLine: { id: string } }[];
 }
 
 interface FunctionRunResult {
-  discountApplicationStrategy: "FIRST" | "MAXIMUM" | "ALL";
-  discounts: Discount[];
+  operations: { productDiscountsAdd: { selectionStrategy: "FIRST" | "MAXIMUM"; candidates: ProductDiscountCandidate[] } }[];
 }
 
 interface BogoConfig {
@@ -48,7 +47,7 @@ interface BogoConfig {
 }
 
 const DEFAULT_CONFIG: BogoConfig = { plan: "free", buyQty: 1, getQty: 1, percentage: 100 };
-const EMPTY: FunctionRunResult = { discountApplicationStrategy: "MAXIMUM", discounts: [] };
+const EMPTY: FunctionRunResult = { operations: [] };
 
 export function run(input: RunInput): FunctionRunResult {
   const config = parseConfig<BogoConfig>(input.discountNode.metafield?.value, DEFAULT_CONFIG);
@@ -61,7 +60,7 @@ export function run(input: RunInput): FunctionRunResult {
   if (percentage <= 0) return EMPTY;
 
   const groupSize = buyQty + getQty;
-  const discounts: Discount[] = [];
+  const candidates: ProductDiscountCandidate[] = [];
 
   for (const line of input.cart.lines) {
     const sets = Math.floor(line.quantity / groupSize);
@@ -70,13 +69,13 @@ export function run(input: RunInput): FunctionRunResult {
     const unit = toAmount(line.cost.amountPerQuantity.amount);
     const amount = discountedItems * unit * (percentage / 100);
     if (amount <= 0) continue;
-    discounts.push({
+    candidates.push({
       message: `Buy ${buyQty} get ${getQty} at ${percentage}% off`,
       value: { fixedAmount: { amount: money(amount) } },
       targets: [{ cartLine: { id: line.id } }],
     });
   }
 
-  if (discounts.length === 0) return EMPTY;
-  return { discountApplicationStrategy: "MAXIMUM", discounts };
+  if (candidates.length === 0) return EMPTY;
+  return { operations: [{ productDiscountsAdd: { selectionStrategy: "MAXIMUM", candidates } }] };
 }

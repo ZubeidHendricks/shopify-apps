@@ -25,15 +25,14 @@ import { run as renameShipping } from "../templates/presets/rename-shipping/exte
 
 const fixture = (rel: string) => JSON.parse(readFileSync(new URL(rel, import.meta.url), "utf8"));
 
-const hasDiscount = (r: any) => Array.isArray(r.discounts) && r.discounts.length > 0;
 const hasOps = (r: any) => Array.isArray(r.operations) && r.operations.length > 0;
 
 const cases: Array<{ kind: string; run: (i: any) => any; path: string; expect: (r: any) => boolean }> = [
-  { kind: "discount-qty", run: volume, path: "../templates/presets/discount-qty/extensions/discount/fixtures/run.input.json", expect: hasDiscount },
-  { kind: "discount-spend", run: spend, path: "../templates/presets/discount-spend/extensions/discount/fixtures/run.input.json", expect: hasDiscount },
-  { kind: "bogo", run: bogo, path: "../templates/presets/bogo/extensions/discount/fixtures/run.input.json", expect: hasDiscount },
-  { kind: "first-order", run: firstOrder, path: "../templates/presets/first-order/extensions/discount/fixtures/run.input.json", expect: hasDiscount },
-  { kind: "bundle", run: bundle, path: "../templates/presets/bundle/extensions/discount/fixtures/run.input.json", expect: hasDiscount },
+  { kind: "discount-qty", run: volume, path: "../templates/presets/discount-qty/extensions/discount/fixtures/run.input.json", expect: hasOps},
+  { kind: "discount-spend", run: spend, path: "../templates/presets/discount-spend/extensions/discount/fixtures/run.input.json", expect: hasOps},
+  { kind: "bogo", run: bogo, path: "../templates/presets/bogo/extensions/discount/fixtures/run.input.json", expect: hasOps},
+  { kind: "first-order", run: firstOrder, path: "../templates/presets/first-order/extensions/discount/fixtures/run.input.json", expect: hasOps},
+  { kind: "bundle", run: bundle, path: "../templates/presets/bundle/extensions/discount/fixtures/run.input.json", expect: hasOps},
   { kind: "free-shipping", run: freeShipping, path: "../templates/presets/free-shipping/extensions/discount/fixtures/run.input.json", expect: hasOps },
   { kind: "cart-min-max", run: minMax, path: "../templates/presets/cart-min-max/extensions/validation/fixtures/run.input.json", expect: hasOps },
   { kind: "per-product-limit", run: productLimit, path: "../templates/presets/per-product-limit/extensions/validation/fixtures/run.input.json", expect: hasOps },

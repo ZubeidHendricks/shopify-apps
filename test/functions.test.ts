@@ -18,18 +18,24 @@ import { run as countryBlock } from "../templates/presets/country-block/extensio
 const node = (cfg: unknown) => ({ metafield: { value: JSON.stringify(cfg) } });
 const shop = (cfg: unknown) => ({ metafield: { value: JSON.stringify(cfg) } });
 
+// Accessors for the unified Discount API result shape (operations[]).
+const orderCands = (r: any) => r.operations[0]?.orderDiscountsAdd?.candidates ?? [];
+const productCands = (r: any) => r.operations[0]?.productDiscountsAdd?.candidates ?? [];
+const noOps = (r: any) => (r.operations?.length ?? 0) === 0;
+
 // ---------------------------------------------------------------------------
 // discount-qty (volume)
 // ---------------------------------------------------------------------------
 test("volume: no config => no discount", () => {
   const r = volume({ cart: { lines: [{ quantity: 9 }] }, discountNode: { metafield: null } } as any);
-  assert.equal(r.discounts.length, 0);
+  assert.ok(noOps(r));
 });
 
 test("volume: applies tier when quantity threshold met", () => {
   const cfg = { plan: "starter", tiers: [{ threshold: 3, percentage: 10 }] };
   const r = volume({ cart: { lines: [{ quantity: 2 }, { quantity: 2 }] }, discountNode: node(cfg) } as any);
-  assert.equal(r.discounts[0].value.percentage.value, "10");
+  assert.equal(orderCands(r)[0].value.percentage.value, "10");
+  assert.deepEqual(orderCands(r)[0].targets, [{ orderSubtotal: { excludedCartLineIds: [] } }]);
 });
 
 test("volume: starter ignores extra tiers, pro honors them", () => {
@@ -37,8 +43,8 @@ test("volume: starter ignores extra tiers, pro honors them", () => {
   const lines = [{ quantity: 6 }];
   const starter = volume({ cart: { lines }, discountNode: node({ plan: "starter", tiers }) } as any);
   const pro = volume({ cart: { lines }, discountNode: node({ plan: "pro", tiers }) } as any);
-  assert.equal(starter.discounts[0].value.percentage.value, "10"); // capped to first tier
-  assert.equal(pro.discounts[0].value.percentage.value, "25");
+  assert.equal(orderCands(starter)[0].value.percentage.value, "10"); // capped to first tier
+  assert.equal(orderCands(pro)[0].value.percentage.value, "25");
 });
 
 // ---------------------------------------------------------------------------
@@ -48,8 +54,8 @@ test("spend: discount keyed off subtotal", () => {
   const cfg = { plan: "pro", tiers: [{ threshold: 50, percentage: 10 }, { threshold: 100, percentage: 20 }] };
   const below = spend({ cart: { cost: { subtotalAmount: { amount: "40.00" } } }, discountNode: node(cfg) } as any);
   const high = spend({ cart: { cost: { subtotalAmount: { amount: "120.00" } } }, discountNode: node(cfg) } as any);
-  assert.equal(below.discounts.length, 0);
-  assert.equal(high.discounts[0].value.percentage.value, "20");
+  assert.ok(noOps(below));
+  assert.equal(orderCands(high)[0].value.percentage.value, "20");
 });
 
 // ---------------------------------------------------------------------------
@@ -59,20 +65,20 @@ test("bogo: starter is buy-1-get-1-free regardless of config", () => {
   const cfg = { plan: "starter", buyQty: 5, getQty: 5, percentage: 50 };
   const r = bogo({ cart: { lines: [{ id: "l1", quantity: 4, cost: { amountPerQuantity: { amount: "10.00" } } }] }, discountNode: node(cfg) } as any);
   // groupSize=2, sets=2, freeItems=2, unit 10 => 20.00 off
-  assert.equal(r.discounts[0].value.fixedAmount.amount, "20.00");
-  assert.deepEqual(r.discounts[0].targets, [{ cartLine: { id: "l1" } }]);
+  assert.equal(productCands(r)[0].value.fixedAmount.amount, "20.00");
+  assert.deepEqual(productCands(r)[0].targets, [{ cartLine: { id: "l1" } }]);
 });
 
 test("bogo: pro honors custom buy/get/percentage", () => {
   const cfg = { plan: "pro", buyQty: 2, getQty: 1, percentage: 50 };
   const r = bogo({ cart: { lines: [{ id: "l1", quantity: 3, cost: { amountPerQuantity: { amount: "30.00" } } }] }, discountNode: node(cfg) } as any);
   // groupSize=3, sets=1, discounted=1 unit @50% of 30 => 15.00
-  assert.equal(r.discounts[0].value.fixedAmount.amount, "15.00");
+  assert.equal(productCands(r)[0].value.fixedAmount.amount, "15.00");
 });
 
 test("bogo: below group size => no discount", () => {
   const r = bogo({ cart: { lines: [{ id: "l1", quantity: 1, cost: { amountPerQuantity: { amount: "10.00" } } }] }, discountNode: node({ plan: "starter" }) } as any);
-  assert.equal(r.discounts.length, 0);
+  assert.ok(noOps(r));
 });
 
 // ---------------------------------------------------------------------------
@@ -82,16 +88,16 @@ test("first-order: new logged-in customer qualifies, returning does not", () => 
   const cfg = { plan: "starter", percentage: 15, includeGuests: false };
   const newC = firstOrder({ cart: { buyerIdentity: { customer: { numberOfOrders: 0 } } }, discountNode: node(cfg) } as any);
   const ret = firstOrder({ cart: { buyerIdentity: { customer: { numberOfOrders: 3 } } }, discountNode: node(cfg) } as any);
-  assert.equal(newC.discounts[0].value.percentage.value, "15");
-  assert.equal(ret.discounts.length, 0);
+  assert.equal(orderCands(newC)[0].value.percentage.value, "15");
+  assert.ok(noOps(ret));
 });
 
 test("first-order: guests only when pro + includeGuests", () => {
   const guestCart = { cart: { buyerIdentity: { customer: null } } };
   const starter = firstOrder({ ...guestCart, discountNode: node({ plan: "starter", percentage: 15, includeGuests: true }) } as any);
   const pro = firstOrder({ ...guestCart, discountNode: node({ plan: "pro", percentage: 15, includeGuests: true }) } as any);
-  assert.equal(starter.discounts.length, 0);
-  assert.equal(pro.discounts[0].value.percentage.value, "15");
+  assert.ok(noOps(starter));
+  assert.equal(orderCands(pro)[0].value.percentage.value, "15");
 });
 
 // ---------------------------------------------------------------------------
@@ -100,14 +106,14 @@ test("first-order: guests only when pro + includeGuests", () => {
 test("bundle: needs minItems distinct lines; starter locked to 2", () => {
   const oneLine = { cart: { lines: [{ id: "a" }] } };
   const twoLines = { cart: { lines: [{ id: "a" }, { id: "b" }] } };
-  assert.equal(bundle({ ...oneLine, discountNode: node({ plan: "starter", minItems: 2, percentage: 10 }) } as any).discounts.length, 0);
-  assert.equal(bundle({ ...twoLines, discountNode: node({ plan: "starter", minItems: 99, percentage: 10 }) } as any).discounts[0].value.percentage.value, "10");
+  assert.ok(noOps(bundle({ ...oneLine, discountNode: node({ plan: "starter", minItems: 2, percentage: 10 }) } as any)));
+  assert.equal(orderCands(bundle({ ...twoLines, discountNode: node({ plan: "starter", minItems: 99, percentage: 10 }) } as any))[0].value.percentage.value, "10");
 });
 
 test("bundle: pro can raise the threshold", () => {
   const threeLines = { cart: { lines: [{ id: "a" }, { id: "b" }, { id: "c" }] } };
   const r = bundle({ ...threeLines, discountNode: node({ plan: "pro", minItems: 4, percentage: 10 }) } as any);
-  assert.equal(r.discounts.length, 0); // 3 < 4
+  assert.ok(noOps(r)); // 3 < 4
 });
 
 // ---------------------------------------------------------------------------
