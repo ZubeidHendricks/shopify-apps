@@ -1,0 +1,1 @@
+{ "scopes": "write_delivery_customizations", "feature": "delivery", "target": "purchase.delivery-customization.run", "blurb": "Rename a delivery option at checkout (e.g. 'Standard' -> 'Free Shipping (3-5 days)') and, on Pro, move it to the top of the list." }

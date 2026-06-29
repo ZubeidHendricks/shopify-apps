@@ -56,10 +56,12 @@ not reskins. Available kinds = subdirs of `templates/presets/`:
 | `discount-spend` | `cart.lines.discounts.generate.run` | write_discounts | % off at subtotal thresholds |
 | `bogo` | `cart.lines.discounts.generate.run` | write_discounts | buy X get Y at a discount (per line) |
 | `first-order` | `cart.lines.discounts.generate.run` | write_discounts | % off for first-time customers |
+| `bundle` | `cart.lines.discounts.generate.run` | write_discounts | % off when cart has N+ different products |
 | `cart-min-max` | `cart.validations.generate.run` | — | min order value / max item count |
 | `per-product-limit` | `cart.validations.generate.run` | — | cap units per product/variant |
 | `payment-hide` | `purchase.payment-customization.run` | write_payment_customizations | hide a payment method by total/country |
 | `delivery-hide` | `purchase.delivery-customization.run` | write_delivery_customizations | hide a delivery option by total/country |
+| `rename-shipping` | `purchase.delivery-customization.run` | write_delivery_customizations | rename a delivery option (Pro: move to top) |
 
 ```bash
 npm install                                          # links workspaces
@@ -91,20 +93,33 @@ flags:
 Realistic cadence: batch 3–5 apps through `dev`/`deploy`, submit together,
 iterate on reviewer feedback. See `IDEAS.md` for the backlog.
 
+## Testing
+
+The Function logic (discount math, plan gating, validation rules) is pure and
+deterministic, so it's unit-tested directly — no Shopify auth needed:
+
+```bash
+npm test
+```
+
+Tests live in `test/` and run on Node's built-in runner with native TypeScript
+type-stripping (Node 20+). `test/function-kit.test.ts` covers the shared helpers;
+`test/functions.test.ts` imports every preset's `run()` and asserts behavior
+including Starter-vs-Pro gating and threshold edges (25 tests).
+
+> What this does **not** cover: live checkout behavior, billing approval, and
+> webhook delivery — those need `shopify app dev` against a real dev store.
+
 ## Status
 
-- `@factory/function-kit` — typechecks clean (`npm run typecheck -w @factory/function-kit`).
+- `@factory/function-kit` — typechecks clean; unit-tested.
 - `@factory/core` — typechecks once an app installs the `@shopify/shopify-app-remix` peer dep.
-- All eight preset `run.ts` Functions typecheck clean against function-kit.
-- 8 apps generated across 4 distinct Function targets, each with its own README:
-  - `apps/volume-discount` — quantity-threshold discount
-  - `apps/spend-save` — subtotal-threshold discount
-  - `apps/bogo` — buy X get Y (per line)
-  - `apps/first-order-discount` — first-time-customer discount
-  - `apps/order-limits` — cart validation (min value / max items)
-  - `apps/product-limits` — per-product/variant quantity cap
-  - `apps/hide-payment` — payment-method hiding by total/country
-  - `apps/hide-delivery` — delivery-option hiding by total/country
+- All 10 preset `run.ts` Functions typecheck clean and pass `npm test` (25 tests).
+- 10 apps generated across 4 distinct Function targets, each with its own README:
+  - `apps/volume-discount` · `apps/spend-save` · `apps/bogo` · `apps/first-order-discount` · `apps/bundle-discount` — discounts
+  - `apps/order-limits` · `apps/product-limits` — cart validation
+  - `apps/hide-payment` — payment customization
+  - `apps/hide-delivery` · `apps/rename-shipping` — delivery customization
 
 Each still needs `shopify app config link` → `dev` → `deploy` against your
 Partner account (interactive auth), then a listing + submission.

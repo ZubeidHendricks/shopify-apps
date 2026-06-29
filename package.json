@@ -2,6 +2,7 @@
   "name": "shopify-apps",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "description": "Factory for a portfolio of small, monetizable Shopify Functions/checkout apps on a shared core.",
   "workspaces": [
     "packages/*",
@@ -9,6 +10,7 @@
   ],
   "scripts": {
     "new": "node scripts/new-app.mjs",
+    "test": "node --test --experimental-strip-types test/*.test.ts",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"
   },

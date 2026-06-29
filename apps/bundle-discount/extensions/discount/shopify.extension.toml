@@ -1,0 +1,20 @@
+# Bundle (distinct-items) discount Function. `bundle-discount` replaced by generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "Bundle Discount"
+handle = "bundle-discount-discount"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.lines.discounts.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

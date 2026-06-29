@@ -1,0 +1,1 @@
+{ "scopes": "write_discounts", "feature": "discount", "target": "cart.lines.discounts.generate.run", "blurb": "Reward variety: apply a percentage discount when the cart contains at least N different products. Starter requires 2 distinct items; Pro lets you set the threshold." }

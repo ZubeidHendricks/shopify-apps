@@ -1,0 +1,20 @@
+# Delivery rename/reorder Function. `rename-shipping` replaced by generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "Rename Shipping"
+handle = "rename-shipping-delivery"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "purchase.delivery-customization.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

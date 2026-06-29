@@ -1,0 +1,15 @@
+query RunInput {
+  cart {
+    deliveryGroups {
+      deliveryOptions {
+        handle
+        title
+      }
+    }
+  }
+  shop {
+    metafield(namespace: "factory", key: "config") {
+      value
+    }
+  }
+}
