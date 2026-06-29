@@ -111,6 +111,16 @@ npm test          # 41 tests, Node built-in runner, native TS type-stripping
   (the exact shape Shopify feeds the WASM) through `run()` and asserts a real
   effect.
 
+### Schema validation (Shopify Dev MCP)
+
+The hand-written GraphQL — each `extensions/*/src/run.graphql` input query and the
+Admin GraphQL in `@factory/core/settings.ts` — is validated against the real
+Shopify schemas using the [Shopify Dev MCP server](https://shopify.dev) (`@shopify/dev-mcp`),
+configured in `.mcp.json`. Its `introspect_*_schema` and
+`validate_graphql_codeblocks` tools catch wrong field/connection names before
+`shopify app dev`. MCP validates the **input queries + admin mutations**;
+`npm run verify` (typegen → build) validates the **output shapes**.
+
 ### End-to-end verify (once an app is linked)
 
 Each app ships a fixture that doubles as input for Shopify's local function
