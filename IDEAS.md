@@ -21,9 +21,12 @@ widgets are listed for later when the core grows a Theme App Extension path.
 11. **Minimum order amount enforcement.** *(built: apps/order-limits, preset cart-min-max)*
 12. **Maximum order quantity / anti-scalping limit.** *(built: apps/order-limits — Pro tier)*
 13. **Per-product purchase limits.** *(built: apps/product-limits, preset per-product-limit)*
-14. Block mixed domestic/international carts.
+14. **Block/allow checkout by country.** *(built: apps/country-block, preset country-block; allowlist mode on Pro)*
 15. Require minimum quantity for specific products.
 16. PO-box / region checkout blocking.
+
+### Free shipping (`cart.delivery-options.discounts.generate.run`)
+16b. **Free shipping over a threshold.** *(built: apps/free-shipping, preset free-shipping; second tier on Pro)*
 
 ### Delivery customization (`purchase.delivery-customization.run`)
 17. **Hide express shipping below a threshold.** *(built: apps/hide-delivery, preset delivery-hide; also hides by country on Pro)*

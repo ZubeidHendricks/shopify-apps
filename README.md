@@ -57,8 +57,10 @@ not reskins. Available kinds = subdirs of `templates/presets/`:
 | `bogo` | `cart.lines.discounts.generate.run` | write_discounts | buy X get Y at a discount (per line) |
 | `first-order` | `cart.lines.discounts.generate.run` | write_discounts | % off for first-time customers |
 | `bundle` | `cart.lines.discounts.generate.run` | write_discounts | % off when cart has N+ different products |
+| `free-shipping` | `cart.delivery-options.discounts.generate.run` | write_discounts | free shipping over a subtotal threshold |
 | `cart-min-max` | `cart.validations.generate.run` | — | min order value / max item count |
 | `per-product-limit` | `cart.validations.generate.run` | — | cap units per product/variant |
+| `country-block` | `cart.validations.generate.run` | — | block/allow checkout by country |
 | `payment-hide` | `purchase.payment-customization.run` | write_payment_customizations | hide a payment method by total/country |
 | `delivery-hide` | `purchase.delivery-customization.run` | write_delivery_customizations | hide a delivery option by total/country |
 | `rename-shipping` | `purchase.delivery-customization.run` | write_delivery_customizations | rename a delivery option (Pro: move to top) |
@@ -99,25 +101,37 @@ The Function logic (discount math, plan gating, validation rules) is pure and
 deterministic, so it's unit-tested directly — no Shopify auth needed:
 
 ```bash
-npm test
+npm test          # 41 tests, Node built-in runner, native TS type-stripping
 ```
 
-Tests live in `test/` and run on Node's built-in runner with native TypeScript
-type-stripping (Node 20+). `test/function-kit.test.ts` covers the shared helpers;
-`test/functions.test.ts` imports every preset's `run()` and asserts behavior
-including Starter-vs-Pro gating and threshold edges (25 tests).
+- `test/function-kit.test.ts` — shared helpers (tier resolution, money, gating).
+- `test/functions.test.ts` — every preset's `run()`, incl. Starter-vs-Pro gating
+  and threshold edges.
+- `test/fixtures.test.ts` — replays each preset's `fixtures/run.input.json`
+  (the exact shape Shopify feeds the WASM) through `run()` and asserts a real
+  effect.
 
-> What this does **not** cover: live checkout behavior, billing approval, and
-> webhook delivery — those need `shopify app dev` against a real dev store.
+### End-to-end verify (once an app is linked)
+
+Each app ships a fixture that doubles as input for Shopify's local function
+runner. After `shopify app config link`:
+
+```bash
+npm run verify -- <slug>   # typegen → build (WASM) → function run against the fixture
+```
+
+This runs the real Function toolchain (via npx). What still needs a dev store:
+live checkout behavior, billing approval, and webhook delivery (`shopify app dev`).
 
 ## Status
 
 - `@factory/function-kit` — typechecks clean; unit-tested.
 - `@factory/core` — typechecks once an app installs the `@shopify/shopify-app-remix` peer dep.
-- All 10 preset `run.ts` Functions typecheck clean and pass `npm test` (25 tests).
-- 10 apps generated across 4 distinct Function targets, each with its own README:
+- All 12 preset `run.ts` Functions typecheck clean and pass `npm test` (41 tests).
+- 12 apps generated across 5 distinct Function targets, each with its own README + fixture:
   - `apps/volume-discount` · `apps/spend-save` · `apps/bogo` · `apps/first-order-discount` · `apps/bundle-discount` — discounts
-  - `apps/order-limits` · `apps/product-limits` — cart validation
+  - `apps/free-shipping` — delivery discount
+  - `apps/order-limits` · `apps/product-limits` · `apps/country-block` — cart validation
   - `apps/hide-payment` — payment customization
   - `apps/hide-delivery` · `apps/rename-shipping` — delivery customization
 

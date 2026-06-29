@@ -1,0 +1,6 @@
+{
+  "cart": { "lines": [{ "quantity": 3 }, { "quantity": 1 }] },
+  "discountNode": {
+    "metafield": { "value": "{\"plan\":\"pro\",\"tiers\":[{\"threshold\":3,\"percentage\":10},{\"threshold\":6,\"percentage\":20}]}" }
+  }
+}

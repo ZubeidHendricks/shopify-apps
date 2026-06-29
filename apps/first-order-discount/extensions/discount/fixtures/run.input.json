@@ -1,0 +1,6 @@
+{
+  "cart": { "buyerIdentity": { "customer": { "numberOfOrders": 0 } } },
+  "discountNode": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"percentage\":15,\"includeGuests\":false}" }
+  }
+}

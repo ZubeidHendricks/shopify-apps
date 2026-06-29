@@ -1,0 +1,6 @@
+{
+  "cart": { "lines": [{ "id": "gid://shopify/CartLine/1" }, { "id": "gid://shopify/CartLine/2" }] },
+  "discountNode": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"minItems\":2,\"percentage\":10}" }
+  }
+}

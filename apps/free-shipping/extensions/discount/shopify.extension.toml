@@ -1,0 +1,20 @@
+# Free-shipping (delivery discount) Function. `free-shipping` replaced by generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "Free Shipping Bar"
+handle = "free-shipping-discount"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.delivery-options.discounts.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

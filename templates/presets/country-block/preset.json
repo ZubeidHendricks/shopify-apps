@@ -1,0 +1,1 @@
+{ "scopes": "", "feature": "validation", "target": "cart.validations.generate.run", "blurb": "Block checkout for shipping addresses in certain countries. Starter uses a blocklist; Pro switches to allowlist mode (only listed countries can check out)." }

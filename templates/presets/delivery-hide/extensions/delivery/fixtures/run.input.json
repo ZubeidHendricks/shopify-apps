@@ -1,0 +1,17 @@
+{
+  "cart": {
+    "cost": { "subtotalAmount": { "amount": "40.00" } },
+    "deliveryGroups": [
+      {
+        "deliveryAddress": { "countryCode": "US" },
+        "deliveryOptions": [
+          { "handle": "express", "title": "Express" },
+          { "handle": "standard", "title": "Standard" }
+        ]
+      }
+    ]
+  },
+  "shop": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"optionTitle\":\"Express\",\"hideBelow\":75,\"hideCountries\":[]}" }
+  }
+}

@@ -1,0 +1,1 @@
+{ "scopes": "write_discounts", "feature": "discount", "target": "cart.delivery-options.discounts.generate.run", "blurb": "Free shipping once the cart subtotal crosses a threshold. Starter uses one threshold; Pro adds a second, higher threshold for premium tiers." }

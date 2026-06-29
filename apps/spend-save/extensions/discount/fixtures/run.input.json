@@ -1,0 +1,6 @@
+{
+  "cart": { "cost": { "subtotalAmount": { "amount": "120.00" } } },
+  "discountNode": {
+    "metafield": { "value": "{\"plan\":\"pro\",\"tiers\":[{\"threshold\":50,\"percentage\":10},{\"threshold\":100,\"percentage\":20}]}" }
+  }
+}

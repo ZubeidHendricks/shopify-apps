@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "new": "node scripts/new-app.mjs",
+    "verify": "node scripts/verify-app.mjs",
     "test": "node --test --experimental-strip-types test/*.test.ts",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"

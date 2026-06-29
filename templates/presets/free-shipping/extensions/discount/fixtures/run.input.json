@@ -1,0 +1,9 @@
+{
+  "cart": {
+    "cost": { "subtotalAmount": { "amount": "100.00" } },
+    "deliveryGroups": [{ "id": "gid://shopify/CartDeliveryGroup/1" }]
+  },
+  "discountNode": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"tiers\":[{\"threshold\":75,\"percentage\":100}]}" }
+  }
+}

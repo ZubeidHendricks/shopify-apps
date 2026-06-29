@@ -11,6 +11,8 @@ import { run as productLimit } from "../templates/presets/per-product-limit/exte
 import { run as hidePayment } from "../templates/presets/payment-hide/extensions/payment/src/run.ts";
 import { run as hideDelivery } from "../templates/presets/delivery-hide/extensions/delivery/src/run.ts";
 import { run as renameShipping } from "../templates/presets/rename-shipping/extensions/delivery/src/run.ts";
+import { run as freeShipping } from "../templates/presets/free-shipping/extensions/discount/src/run.ts";
+import { run as countryBlock } from "../templates/presets/country-block/extensions/validation/src/run.ts";
 
 // Helpers to build the metafield envelope the Functions read.
 const node = (cfg: unknown) => ({ metafield: { value: JSON.stringify(cfg) } });
@@ -196,4 +198,51 @@ test("rename-shipping: renames; pro adds move-to-top", () => {
   const pro = renameShipping({ ...base, shop: shop({ plan: "pro", matchTitle: "Standard", newName: "Free Shipping", moveToTop: true }) } as any);
   assert.equal(pro.operations.length, 2);
   assert.deepEqual(pro.operations[1], { move: { deliveryOptionHandle: "std", index: 0 } });
+});
+
+// ---------------------------------------------------------------------------
+// free-shipping (delivery discount)
+// ---------------------------------------------------------------------------
+test("free-shipping: grants free shipping per delivery group over threshold", () => {
+  const cfg = { plan: "starter", tiers: [{ threshold: 75, percentage: 100 }] };
+  const input = (subtotal: string) => ({
+    cart: { cost: { subtotalAmount: { amount: subtotal } }, deliveryGroups: [{ id: "dg1" }, { id: "dg2" }] },
+    discountNode: node(cfg),
+  });
+  assert.equal(freeShipping(input("40.00") as any).operations.length, 0);
+  const r = freeShipping(input("100.00") as any);
+  assert.equal(r.operations[0].deliveryDiscountsAdd.candidates.length, 2);
+  assert.equal(r.operations[0].deliveryDiscountsAdd.candidates[0].value.percentage.value, "100");
+});
+
+test("free-shipping: second threshold is pro-only", () => {
+  const tiers = [{ threshold: 75, percentage: 100 }, { threshold: 50, percentage: 50 }];
+  const input = (plan: string) => ({
+    cart: { cost: { subtotalAmount: { amount: "60.00" } }, deliveryGroups: [{ id: "dg1" }] },
+    discountNode: node({ plan, tiers }),
+  });
+  // subtotal 60: starter only sees the first tier (threshold 75 -> not met) => no-op
+  assert.equal(freeShipping(input("starter") as any).operations.length, 0);
+  // pro sees both; the 50-threshold/50% tier applies
+  assert.equal(freeShipping(input("pro") as any).operations[0].deliveryDiscountsAdd.candidates[0].value.percentage.value, "50");
+});
+
+// ---------------------------------------------------------------------------
+// country-block (validation)
+// ---------------------------------------------------------------------------
+test("country-block: blocklist blocks listed country", () => {
+  const cfg = { plan: "starter", blockedCountries: ["RU"], allowedCountries: [], allowlistMode: false };
+  const blocked = countryBlock({ cart: { deliveryGroups: [{ deliveryAddress: { countryCode: "RU" } }] }, shop: shop(cfg) } as any);
+  const ok = countryBlock({ cart: { deliveryGroups: [{ deliveryAddress: { countryCode: "US" } }] }, shop: shop(cfg) } as any);
+  assert.equal(blocked.operations.length, 1);
+  assert.equal(ok.operations.length, 0);
+});
+
+test("country-block: allowlist mode is pro-only", () => {
+  const cfg = (plan: string) => ({ plan, blockedCountries: [], allowedCountries: ["US"], allowlistMode: true });
+  const cart = { deliveryGroups: [{ deliveryAddress: { countryCode: "GB" } }] };
+  // starter ignores allowlist (no blocked list) => allowed through
+  assert.equal(countryBlock({ cart, shop: shop(cfg("starter")) } as any).operations.length, 0);
+  // pro enforces allowlist: GB not allowed => blocked
+  assert.equal(countryBlock({ cart, shop: shop(cfg("pro")) } as any).operations.length, 1);
 });

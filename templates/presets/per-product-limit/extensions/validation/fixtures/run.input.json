@@ -1,0 +1,10 @@
+{
+  "cart": {
+    "lines": [
+      { "quantity": 3, "merchandise": { "__typename": "ProductVariant", "id": "gid://shopify/ProductVariant/1", "title": "Classic Tee" } }
+    ]
+  },
+  "shop": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"defaultMax\":2,\"perVariant\":{}}" }
+  }
+}

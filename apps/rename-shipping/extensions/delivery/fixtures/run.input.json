@@ -1,0 +1,10 @@
+{
+  "cart": {
+    "deliveryGroups": [
+      { "deliveryOptions": [{ "handle": "standard", "title": "Standard" }] }
+    ]
+  },
+  "shop": {
+    "metafield": { "value": "{\"plan\":\"pro\",\"matchTitle\":\"Standard\",\"newName\":\"Free Shipping (3-5 days)\",\"moveToTop\":true}" }
+  }
+}

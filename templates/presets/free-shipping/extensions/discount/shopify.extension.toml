@@ -1,0 +1,20 @@
+# Free-shipping (delivery discount) Function. `__APP_SLUG__` replaced by generator.
+api_version = "2025-01"
+
+[[extensions]]
+name = "__APP_NAME__"
+handle = "__APP_SLUG__-discount"
+type = "function"
+
+  [[extensions.targeting]]
+  target = "cart.delivery-options.discounts.generate.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.metafields]
+  namespace = "$app:settings"
+  key = "config"

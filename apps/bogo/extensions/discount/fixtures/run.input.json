@@ -1,0 +1,10 @@
+{
+  "cart": {
+    "lines": [
+      { "id": "gid://shopify/CartLine/1", "quantity": 4, "cost": { "amountPerQuantity": { "amount": "10.00" } } }
+    ]
+  },
+  "discountNode": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"buyQty\":1,\"getQty\":1,\"percentage\":100}" }
+  }
+}

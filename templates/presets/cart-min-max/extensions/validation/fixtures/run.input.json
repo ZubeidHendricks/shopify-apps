@@ -1,0 +1,9 @@
+{
+  "cart": {
+    "cost": { "subtotalAmount": { "amount": "30.00" } },
+    "lines": [{ "quantity": 1 }]
+  },
+  "shop": {
+    "metafield": { "value": "{\"plan\":\"starter\",\"minSubtotal\":50,\"maxItems\":0}" }
+  }
+}
